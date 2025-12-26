@@ -80,13 +80,18 @@ Route::middleware(['auth'])->group(function () {
         ->middleware(when(Features::canManageTwoFactorAuthentication() && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword'), ['password.confirm'], []))
         ->name('two-factor.show');
 });
-
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
+    // Admin routes group
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::resource('roles', RoleController::class);
+    Route::prefix('admin')
+        ->name('admin.')
+        ->group(function () {
+            Route::resource('settings', \App\Http\Controllers\Admin\SettingController::class);
+            Route::resource('roles', RoleController::class);
 
-    Route::resource('followup-reasons', FollowupReasonController::class)->except(['create', 'show']);
-    Route::resource('lead-statuses', LeadStatusController::class)->except(['create', 'show']);
+            Route::resource('followup-reasons', FollowupReasonController::class)->except(['create', 'show']);
+            Route::resource('lead-statuses', LeadStatusController::class)->except(['create', 'show']);
+        });
 });

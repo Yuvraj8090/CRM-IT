@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             FollowupReasonSeeder::class,
             LeadStatusSeeder::class,
+            SettingsTableSeeder::class,
         ]);
         
     }

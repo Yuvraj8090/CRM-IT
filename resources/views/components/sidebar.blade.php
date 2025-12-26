@@ -54,10 +54,10 @@
 
                 ['route' => 'profile.show', 'label' => 'Profile', 'icon' => 'fas fa-user-circle'],
 
-                ['route' => 'lead-statuses.index', 'label' => 'Lead Status', 'icon' => 'fas fa-tags'],
-                ['route' => 'followup-reasons.index', 'label' => 'Followup Reasons', 'icon' => 'fas fa-tags'],
+                ['route' => 'admin.lead-statuses.index', 'label' => 'Lead Status', 'icon' => 'fas fa-tags'],
+                ['route' => 'admin.followup-reasons.index', 'label' => 'Followup Reasons', 'icon' => 'fas fa-tags'],
 
-                ['route' => 'roles.index', 'label' => 'Roles & Permissions', 'icon' => 'fas fa-user-shield'],
+                ['route' => 'admin.roles.index', 'label' => 'Roles & Permissions', 'icon' => 'fas fa-user-shield'],
             ];
         @endphp
 

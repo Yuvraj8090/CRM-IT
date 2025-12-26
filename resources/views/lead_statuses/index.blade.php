@@ -53,15 +53,13 @@
                     class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-xl relative p-6">
 
                     <!-- Close -->
-                    <button @click="closeModal()"
-                        class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                    <button @click="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
                         <i class="fas fa-times text-xl"></i>
                     </button>
 
                     <!-- Title -->
                     <div class="text-center border-b pb-3 mb-4">
-                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white"
-                            x-text="modalTitle"></h2>
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white" x-text="modalTitle"></h2>
                     </div>
 
                     <!-- Form -->
@@ -101,12 +99,10 @@
 
                         <!-- Actions -->
                         <div class="flex justify-end gap-2 pt-4">
-                            <button type="button" @click="closeModal()"
-                                class="px-4 py-2 bg-gray-300 rounded-xl">
+                            <button type="button" @click="closeModal()" class="px-4 py-2 bg-gray-300 rounded-xl">
                                 Cancel
                             </button>
-                            <button type="submit"
-                                class="px-4 py-2 bg-blue-600 text-white rounded-xl">
+                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-xl">
                                 Save
                             </button>
                         </div>
@@ -143,21 +139,41 @@
                         this.table = $('#leadStatusTable').DataTable({
                             processing: true,
                             serverSide: true,
-                            ajax: "{{ route('lead-statuses.index') }}",
-                            columns: [
-                                { data: 'id', name: 'id' },
-                                { data: 'name', name: 'name' },
-                                { data: 'color', orderable: false },
-                                { data: 'order_by', searchable: false },
-                                { data: 'is_active', searchable: false },
-                                { data: 'action', orderable: false, searchable: false }
+                            ajax: "{{ route('admin.lead-statuses.index') }}",
+                            columns: [{
+                                    data: 'id',
+                                    name: 'id'
+                                },
+                                {
+                                    data: 'name',
+                                    name: 'name'
+                                },
+                                {
+                                    data: 'color',
+                                    orderable: false
+                                },
+                                {
+                                    data: 'order_by',
+                                    searchable: false
+                                },
+                                {
+                                    data: 'is_active',
+                                    searchable: false
+                                },
+                                {
+                                    data: 'action',
+                                    orderable: false,
+                                    searchable: false
+                                }
                             ],
-                            order: [[0, 'asc']]
+                            order: [
+                                [0, 'asc']
+                            ]
                         });
 
                         window.addEventListener('edit-lead', e => this.openModal(e.detail));
 
-                        $('#leadStatusTable').on('click', '.delete-btn', function () {
+                        $('#leadStatusTable').on('click', '.delete-btn', function() {
                             const id = $(this).data('id');
 
                             Swal.fire({
@@ -168,7 +184,7 @@
                             }).then(result => {
                                 if (result.isConfirmed) {
                                     $.ajax({
-                                        url: `{{ url('lead-statuses') }}/${id}`,
+                                        url: `{{ url('/admin/lead-statuses') }}/${id}`,
                                         type: 'DELETE',
                                         success: res => {
                                             self.toast(res.message);
@@ -210,9 +226,9 @@
                             is_active: this.leadStatus.is_active == 1
                         };
 
-                        const url = payload.id
-                            ? `{{ url('lead-statuses') }}/${payload.id}`
-                            : `{{ route('lead-statuses.store') }}`;
+                        const url = payload.id ?
+                            `{{ url('lead-statuses') }}/${payload.id}` :
+                            `{{ route('lead-statuses.store') }}`;
 
                         $.ajax({
                             url,
