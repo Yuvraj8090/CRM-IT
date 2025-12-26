@@ -175,7 +175,7 @@
                         this.table = $('#followupReasonTable').DataTable({
                             processing: true,
                             serverSide: true,
-                            ajax: "{{ route('followup-reasons.index') }}",
+                            ajax: "{{ route('admin.followup-reasons.index') }}",
                             columns: [{
                                     data: 'id',
                                     name: 'id'
@@ -284,8 +284,8 @@
                         };
 
                         const url = payload.id ?
-                            `{{ url('followup-reasons') }}/${payload.id}` :
-                            `{{ route('followup-reasons.store') }}`;
+                            `{{ url('/admin/followup-reasons') }}/${payload.id}` :
+                            `{{ route('admin.followup-reasons.store') }}`;
 
                         $.ajax({
                             url,

@@ -106,7 +106,7 @@
                         this.table = $('#rolesTable').DataTable({
                             processing: true,
                             serverSide: true,
-                            ajax: "{{ route('roles.index') }}",
+                            ajax: "{{ route('admin.roles.index') }}",
                             columns: [
                                 { data: 'id', name: 'id' },
                                 { data: 'name', name: 'name' },
@@ -132,7 +132,7 @@
                             }).then(result => {
                                 if (result.isConfirmed) {
                                     $.ajax({
-                                        url: `{{ url('roles') }}/${id}`,
+                                        url: `{{ url('/admin/roles') }}/${id}`,
                                         type: 'DELETE',
                                         success: res => {
                                             self.toast(res.message);
@@ -164,8 +164,8 @@
 
                     saveRole() {
                         const url = this.role.id
-                            ? `{{ url('roles') }}/${this.role.id}`
-                            : `{{ route('roles.store') }}`;
+                            ? `{{ url('/admin/roles') }}/${this.role.id}`
+                            : `{{ route('admin.roles.store') }}`;
 
                         $.ajax({
                             url,

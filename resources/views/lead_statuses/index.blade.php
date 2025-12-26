@@ -227,8 +227,8 @@
                         };
 
                         const url = payload.id ?
-                            `{{ url('lead-statuses') }}/${payload.id}` :
-                            `{{ route('lead-statuses.store') }}`;
+                            `{{ url('/admin/lead-statuses') }}/${payload.id}` :
+                            `{{ route('admin.lead-statuses.store') }}`;
 
                         $.ajax({
                             url,
