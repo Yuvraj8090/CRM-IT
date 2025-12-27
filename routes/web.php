@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\FollowupReasonController;
 use App\Http\Controllers\LeadStatusController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PackageController;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -88,6 +89,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::prefix('admin')
         ->name('admin.')
         ->group(function () {
+            Route::resource('packages', PackageController::class);
+Route::post('packages/{id}/restore', [PackageController::class, 'restore'])
+        ->name('packages.restore');
             Route::resource('settings', \App\Http\Controllers\Admin\SettingController::class);
             Route::resource('roles', RoleController::class);
 
