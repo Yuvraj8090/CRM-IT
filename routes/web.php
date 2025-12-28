@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\FollowupReasonController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\LeadStatusController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PackageController;
@@ -92,6 +93,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             Route::resource('packages', PackageController::class);
 Route::post('packages/{id}/restore', [PackageController::class, 'restore'])
         ->name('packages.restore');
+        Route::resource('leads',LeadController::class);
             Route::resource('settings', \App\Http\Controllers\Admin\SettingController::class);
             Route::resource('roles', RoleController::class);
 
