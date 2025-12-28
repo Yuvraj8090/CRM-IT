@@ -20,48 +20,26 @@
 
         @php
         $mainLinks = [
-        [
-        'route' => 'dashboard',
-        'label' => 'Dashboard',
-        'icon' => 'fas fa-chart-line',
-        ],
-        [
-        'route' => 'profile.show',
-        'label' => 'Profile',
-        'icon' => 'fas fa-user-circle',
-        ],
+            ['route' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'fas fa-chart-line'],
+            ['route' => 'profile.show', 'label' => 'Profile', 'icon' => 'fas fa-user-circle'],
         ];
 
         $adminLinks = [
-        [
-        'route' => 'admin.packages.index',
-        'label' => 'Packages',
-        'icon' => 'fas fa-box-open',
-        ],
-        [
-        'route' => 'admin.lead-statuses.index',
-        'label' => 'Lead Statuses',
-        'icon' => 'fas fa-tags',
-        ],
+            ['route' => 'admin.packages.index', 'label' => 'Packages', 'icon' => 'fas fa-box-open'],
+            ['route' => 'admin.lead-statuses.index', 'label' => 'Lead Statuses', 'icon' => 'fas fa-tags'],
+            ['route' => 'admin.followup-reasons.index', 'label' => 'Follow-up Reasons', 'icon' => 'fas fa-comment-dots'],
+            ['route' => 'admin.settings.index', 'label' => 'Site Settings', 'icon' => 'fas fa-cogs'],
+            ['route' => 'admin.roles.index', 'label' => 'Roles & Permissions', 'icon' => 'fas fa-user-shield'],
+            ['route' => 'admin.leads.index', 'label' => 'Leads', 'icon' => 'fas fa-users'],
+        ];
 
-        [
-        'route' => 'admin.followup-reasons.index',
-        'label' => 'Follow-up Reasons',
-        'icon' => 'fas fa-comment-dots',
-        ],
-        [
-        'route' => 'admin.settings.index',
-        'label' => 'Site Settings',
-        'icon' => 'fas fa-cogs',
-        ],
-        [
-        'route' => 'admin.roles.index',
-        'label' => 'Roles & Permissions',
-        'icon' => 'fas fa-user-shield',
-        ],
+        $systemLinks = [
+            ['url' => url('/deploy'), 'label' => 'Deploy', 'icon' => 'fas fa-rocket', 'color' => 'text-green-600 dark:text-green-400'],
+            ['url' => url('/run-npm-build'), 'label' => 'NPM Build', 'icon' => 'fas fa-box', 'color' => 'text-indigo-600 dark:text-indigo-400'],
+            ['url' => url('/optimize-app'), 'label' => 'Optimize', 'icon' => 'fas fa-bolt', 'color' => 'text-yellow-600 dark:text-yellow-400'],
+            ['url' => url('/link-storage'), 'label' => 'Storage Link', 'icon' => 'fas fa-link', 'color' => 'text-blue-600 dark:text-blue-400'],
         ];
         @endphp
-
 
         <!-- MAIN -->
         <div>
@@ -69,17 +47,17 @@
                 Main
             </p>
             @foreach ($mainLinks as $link)
-            @include('partials.sidebar-link', ['link' => $link])
+                @include('partials.sidebar-link', ['link' => $link])
             @endforeach
         </div>
 
-        <!-- ADMIN -->
+        <!-- ADMINISTRATION -->
         <div>
             <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
                 Administration
             </p>
             @foreach ($adminLinks as $link)
-            @include('partials.sidebar-link', ['link' => $link])
+                @include('partials.sidebar-link', ['link' => $link])
             @endforeach
         </div>
 
@@ -88,22 +66,12 @@
             <p class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
                 System
             </p>
-
-            <a href="{{ url('/deploy') }}" class="sidebar-action text-green-600 dark:text-green-400">
-                🚀 Run Deploy
-            </a>
-
-            <a href="{{ url('/run-npm-build') }}" class="sidebar-action text-indigo-600 dark:text-indigo-400">
-                📦 NPM Build
-            </a>
-
-            <a href="{{ url('/optimize-app') }}" class="sidebar-action text-yellow-600 dark:text-yellow-400">
-                ⚡ Optimize
-            </a>
-
-            <a href="{{ url('/link-storage') }}" class="sidebar-action text-blue-600 dark:text-blue-400">
-                🔗 Storage Link
-            </a>
+            @foreach ($systemLinks as $link)
+                <a href="{{ $link['url'] }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 {{ $link['color'] }}">
+                    <i class="{{ $link['icon'] }} w-5"></i>
+                    <span class="ml-3 text-sm font-medium">{{ $link['label'] }}</span>
+                </a>
+            @endforeach
         </div>
 
     </nav>
@@ -113,4 +81,3 @@
         © {{ date('Y') }} Yashi Associates
     </div>
 </div>
-

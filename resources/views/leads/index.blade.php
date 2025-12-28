@@ -1,134 +1,150 @@
-
 <x-app-layout>
-   <div x-data="leadModal()" x-cloak class="min-h-screen">
+    <div x-data="leadModal()" x-cloak class="min-h-screen">
 
         <div class="ml-64 min-h-screen p-6 bg-gray-100 dark:bg-gray-900">
             <div class="w-full">
-        <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Leads</h1>
-            <button @click="openModal()"
-                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2">
-                <i class="fas fa-plus"></i> Add Lead
-            </button>
-        </div>
 
-        <!-- Lead Status Counts -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            @foreach (\App\Models\LeadStatus::ordered()->get() as $status)
-                <div class="p-4 rounded shadow flex items-center justify-between"
-                    style="background-color: {{ $status->color ?? '#f3f4f6' }}">
-                    <div class="font-semibold text-gray-900 dark:text-gray-100">{{ $status->name }}</div>
-                    <div class="text-gray-700 dark:text-gray-200 font-bold">
-                        {{ \App\Models\Lead::where('lead_status', $status->name)->count() }}
+                <!-- Header -->
+                <header class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-sm">
+                            <i class="fas fa-users text-xl text-gray-700 dark:text-gray-200"></i>
+                        </div>
+                        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Leads</h1>
                     </div>
-                </div>
-            @endforeach
-        </div>
 
-        <!-- Leads Table -->
-        <div class="bg-white dark:bg-gray-800 rounded shadow p-4 overflow-x-auto">
-            <table id="leads-table" class="min-w-full table-auto text-left">
-                <thead>
-                    <tr class="text-gray-700 dark:text-gray-200">
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Profession</th>
-                        <th>Package</th>
-                        <th>Status</th>
-                        <th>Created At</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+                    <button @click="openModal()"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add Lead
+                    </button>
+                </header>
 
-        <!-- Lead Modal -->
-        <div x-show="modalOpen" x-transition.opacity
-            class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <!-- Lead Status Counts -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <!-- All Leads -->
+                    <div class="p-4 rounded shadow flex items-center justify-between bg-gray-200 dark:bg-gray-700">
+                        <div class="font-semibold text-gray-900 dark:text-gray-100">All</div>
+                        <div class="text-gray-700 dark:text-gray-200 font-bold">
+                            {{ \App\Models\Lead::count() }}
+                        </div>
+                    </div>
 
-            <div @click.outside="closeModal()" x-transition
-                class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-xl relative p-6">
-
-                <!-- Close -->
-                <button @click="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-
-                <!-- Title -->
-                <div class="text-center border-b pb-3 mb-4">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-white" x-text="modalTitle"></h2>
+                    <!-- Individual Lead Statuses -->
+                    @foreach (\App\Models\LeadStatus::ordered()->get() as $status)
+                        <div class="p-4 rounded shadow flex items-center justify-between"
+                            style="background-color: {{ $status->color ?? '#f3f4f6' }}">
+                            <div class="font-semibold text-gray-900 dark:text-gray-100">{{ $status->name }}</div>
+                            <div class="text-gray-700 dark:text-gray-200 font-bold">
+                                {{ \App\Models\Lead::where('lead_status', $status->name)->count() }}
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
-                <!-- Form -->
-                <form @submit.prevent="saveLead()" class="space-y-4">
 
-                    <div>
-                        <label class="block font-medium mb-1">Name</label>
-                        <input x-model="lead.name" required
-                            class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
-                    </div>
+                <!-- Leads Table -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 overflow-x-auto">
+                    <table id="leads-table" class="min-w-full text-sm">
+                        <thead>
+                            <tr class="text-gray-700 dark:text-gray-200">
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Profession</th>
+                                <th>Package</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
 
-                    <div>
-                        <label class="block font-medium mb-1">Email</label>
-                        <input x-model="lead.email" type="email" required
-                            class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
-                    </div>
+                <!-- Lead Modal -->
+                <div x-show="modalOpen" x-transition.opacity
+                    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div @click.outside="closeModal()" x-transition
+                        class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-2xl shadow-xl relative p-6">
 
-                    <div>
-                        <label class="block font-medium mb-1">Phone</label>
-                        <input x-model="lead.phone" type="text" required
-                            class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
-                    </div>
-
-                    <div>
-                        <label class="block font-medium mb-1">Profession</label>
-                        <input x-model="lead.profession" type="text"
-                            class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
-                    </div>
-
-                    <div>
-                        <label class="block font-medium mb-1">Package</label>
-                        <select x-model="lead.package_id" required
-                            class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
-                            <option value="">Select Package</option>
-                            @foreach (\App\Models\Package::all() as $package)
-                                <option value="{{ $package->id }}">{{ $package->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block font-medium mb-1">Lead Status</label>
-                        <select x-model="lead.lead_status"
-                            class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
-                            <option value="">Select Status</option>
-                            @foreach (\App\Models\LeadStatus::ordered()->get() as $status)
-                                <option value="{{ $status->name }}">{{ $status->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="flex justify-end gap-2 pt-4">
-                        <button type="button" @click="closeModal()" class="px-4 py-2 bg-gray-300 rounded-xl">
-                            Cancel
+                        <!-- Close -->
+                        <button @click="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
                         </button>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-xl">
-                            Save
-                        </button>
-                    </div>
 
-                </form>
+                        <!-- Title -->
+                        <div class="text-center border-b pb-3 mb-4">
+                            <h2 class="text-2xl font-bold text-gray-800 dark:text-white" x-text="modalTitle"></h2>
+                        </div>
+
+                        <!-- Form -->
+                        <form @submit.prevent="saveLead()" class="space-y-4">
+
+                            <div>
+                                <label class="block font-medium mb-1">Name</label>
+                                <input x-model="lead.name" required
+                                    class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
+                            </div>
+
+                            <div>
+                                <label class="block font-medium mb-1">Email</label>
+                                <input x-model="lead.email" type="email" required
+                                    class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
+                            </div>
+
+                            <div>
+                                <label class="block font-medium mb-1">Phone</label>
+                                <input x-model="lead.phone" type="text" required
+                                    class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
+                            </div>
+
+                            <div>
+                                <label class="block font-medium mb-1">Profession</label>
+                                <input x-model="lead.profession" type="text"
+                                    class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
+                            </div>
+
+                            <div>
+                                <label class="block font-medium mb-1">Package</label>
+                                <select x-model="lead.package_id"
+                                    class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
+                                    <option value="">Select Package</option>
+                                    @foreach (\App\Models\Package::all() as $package)
+                                        <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block font-medium mb-1">Lead Status</label>
+                                <select x-model="lead.lead_status"
+                                    class="w-full p-3 rounded-xl border bg-gray-50 dark:bg-gray-700">
+                                    <option value="">Select Status</option>
+                                    @foreach (\App\Models\LeadStatus::ordered()->get() as $status)
+                                        <option value="{{ $status->name }}">{{ $status->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="flex justify-end gap-2 pt-4">
+                                <button type="button" @click="closeModal()"
+                                    class="px-4 py-2 bg-gray-300 rounded-xl">Cancel</button>
+                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-xl">Save</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
+
         <script>
             function leadModal() {
                 return {
                     modalOpen: false,
                     modalTitle: 'Add Lead',
-
                     lead: {
                         id: '',
                         name: '',
@@ -138,7 +154,6 @@
                         package_id: '',
                         lead_status: ''
                     },
-
                     table: null,
 
                     init() {
@@ -157,7 +172,6 @@
                             ajax: "{{ route('admin.leads.index') }}",
                             columns: [{
                                     data: 'DT_RowIndex',
-                                    name: 'DT_RowIndex',
                                     orderable: false,
                                     searchable: false
                                 },
@@ -193,7 +207,7 @@
                                             if (status === "{{ $statusItem->name }}") color =
                                                 "{{ $statusItem->color }}";
                                         @endforeach
-                                        return `<span class="px-2 py-1 rounded text-white" style="background-color:${color}">${status}</span>`;
+                                        return `<span class="px-2 py-1 rounded text-white ${color}" style="background-color:">${status}</span>`;
                                     }
                                 },
                                 {
@@ -202,22 +216,17 @@
                                 },
                                 {
                                     data: 'action',
-                                    name: 'action',
                                     orderable: false,
                                     searchable: false
-                                },
+                                }
                             ],
                             order: [
                                 [7, 'desc']
                             ],
                         });
 
-                        // Edit
-                        window.addEventListener('edit-lead', e => {
-                            self.openModal(e.detail);
-                        });
+                        window.addEventListener('edit-lead', e => self.openModal(e.detail));
 
-                        // Delete
                         $('#leads-table').on('click', '.delete-btn', function() {
                             const id = $(this).data('id');
                             Swal.fire({
@@ -228,7 +237,7 @@
                             }).then(result => {
                                 if (result.isConfirmed) {
                                     $.ajax({
-                                        url: `{{ url('/leads') }}/${id}`,
+                                        url: `{{ url('/admin/leads') }}/${id}`,
                                         type: 'DELETE',
                                         success(res) {
                                             self.toast(res.message);
@@ -267,7 +276,8 @@
                         const self = this;
                         let formData = new FormData();
                         Object.keys(this.lead).forEach(k => formData.append(k, this.lead[k]));
-                        let url = this.lead.id ? `{{ url('/admin/leads') }}/${this.lead.id}` : `{{ route('admin.leads.store') }}`;
+                        let url = this.lead.id ? `{{ url('/admin/leads') }}/${this.lead.id}` :
+                            `{{ route('admin.leads.store') }}`;
                         if (this.lead.id) formData.append('_method', 'PUT');
 
                         $.ajax({
@@ -301,6 +311,4 @@
             }
         </script>
     </div>
-
-
 </x-app-layout>
